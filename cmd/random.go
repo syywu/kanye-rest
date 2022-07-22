@@ -1,7 +1,11 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 
 	"github.com/spf13/cobra"
 )
@@ -21,9 +25,41 @@ func init() {
 }
 
 type Fact struct {
-
+Fact string 
 }
 
 func getRandomFact(){
-	fmt.Println("random fact")
+	url:= "http://numbersapi.com/random/trivia"
+	responseBytes := getData(url)
+	fact := Fact{}
+	if err := json.Unmarshal(responseBytes, &fact); err != nil{
+		log.Printf("unable to get unmarshal response %v", err)
+	}
+	fmt.Println(string(fact.Fact))
+}
+
+func getData(API string) []byte{
+	request, err := http.NewRequest(
+		http.MethodGet,
+		API,
+		nil,
+	)
+	if err!= nil{
+		log.Printf("Unable to get data %v", err)
+	}
+
+	request.Header.Add("Accept", "application/json")
+	request.Header.Add("User-Agent", "Random Facts CLI")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil{
+		log.Println("Cannot make a request %v", err)
+	}
+	
+	responseBytes, err := ioutil.ReadAll(response.Body)
+	if err!= nil{
+		log.Println("Cannot read body %v", err)
+	}
+
+	return responseBytes
 }
