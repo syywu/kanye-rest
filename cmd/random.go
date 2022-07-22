@@ -13,10 +13,10 @@ import (
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
 	Use:   "random",
-	Short: "Generate a random fact",
-	Long:  `This command fetches a random fact from FACTS API`,
+	Short: "Generate a random Kayne's quotes",
+	Long:  `This command fetches a random quote from Kayne Rest API`,
 	Run: func(cmd *cobra.Command, args []string) {
-		getRandomFact()
+		getKayneQuote()
 	},
 }
 
@@ -24,18 +24,18 @@ func init() {
 	rootCmd.AddCommand(randomCmd)
 }
 
-type Fact struct {
-Fact string 
+type Quote struct {
+Quote string `json:"quote"`
 }
 
-func getRandomFact(){
-	url:= "http://numbersapi.com/random/trivia"
+func getKayneQuote(){
+	url:= "https://api.kanye.rest"
 	responseBytes := getData(url)
-	fact := Fact{}
-	if err := json.Unmarshal(responseBytes, &fact); err != nil{
+	quote := Quote{}
+	if err := json.Unmarshal(responseBytes, &quote); err != nil{
 		log.Printf("unable to get unmarshal response %v", err)
 	}
-	fmt.Println(string(fact.Fact))
+	fmt.Println(string(quote.Quote))
 }
 
 func getData(API string) []byte{
@@ -49,7 +49,7 @@ func getData(API string) []byte{
 	}
 
 	request.Header.Add("Accept", "application/json")
-	request.Header.Add("User-Agent", "Random Facts CLI")
+	request.Header.Add("User-Agent", "Kayne's quotes CLI")
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil{
