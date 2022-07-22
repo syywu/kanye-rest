@@ -13,7 +13,7 @@ import (
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
 	Use:   "random",
-	Short: "Generate a random Kayne's quotes",
+	Short: "Generate a random Kayne's quote",
 	Long:  `This command fetches a random quote from Kayne Rest API`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getKayneQuote()
