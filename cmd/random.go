@@ -53,12 +53,12 @@ func getData(API string) []byte{
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil{
-		log.Println("Cannot make a request %v", err)
+		log.Printf("Cannot make a request %v", err)
 	}
 	
 	responseBytes, err := ioutil.ReadAll(response.Body)
 	if err!= nil{
-		log.Println("Cannot read body %v", err)
+		log.Printf("Cannot read body %v", err)
 	}
 
 	return responseBytes
